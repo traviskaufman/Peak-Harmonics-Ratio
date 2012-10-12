@@ -29,6 +29,7 @@ The program is very finicky about this format.
 ##Building/Running The Code
 You will need:
 1. [Scala](http://www.scala-lang.org/downloads)
+
 2. [sbt](https://github.com/harrah/xsbt)
 
 Once these are installed and on your $PATH clone this repo, cd into it and then
