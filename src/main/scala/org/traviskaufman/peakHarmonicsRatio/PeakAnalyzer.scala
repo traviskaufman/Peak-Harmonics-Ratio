@@ -16,7 +16,6 @@
 package org.traviskaufman.peakHarmonicsRatio
 
 import scala.math._
-import scala.collection.mutable.ListMap
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
