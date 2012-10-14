@@ -6,7 +6,7 @@ and a dB value of a given peak in a spectrum. It treats the first peak in the
 list as the fundamental frequency, and from that calculates the sum of all of
 the peaks that are harmonics of the fundamental vs. the sum of all the peaks
 that are non-harmonic to the fundamental (note that for each frequency it
-allows for a %5 error deviation from what the ideal harmonic should be). The
+allows for a 3% error deviation from what the ideal harmonic should be). The
 number will be between 0 and 1, and the closer it is to 1, the more likely the
 sound that these peaks came from has a definitive pitch to it.
 

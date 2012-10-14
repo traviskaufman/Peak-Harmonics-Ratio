@@ -6,7 +6,7 @@
  *    containing the amplitude at that particular peak. It treats the first
  *    peak as the fundamental frequency, and calculates the ratio of the sum of
  *    all of the intensities of the harmonic peaks over the sum of all of the
- *    intensities of the non-harmonic peaks. A standard deviation of 5% is
+ *    intensities of the non-harmonic peaks. A standard deviation of 3% is
  *    given to determine the harmonicity of the peaks.
  *
  * Usage: PeakAnalyzer [file]
@@ -89,21 +89,31 @@ object PeakAnalyzer {
    * @return Double
    *    Exactly what the description said.
    */
-  def get_ratio(percent_deviation: Int = 5): Double = {
+  def get_ratio(percent_deviation: Int = 3): Double = {
     val err_factor = 0.01 * percent_deviation
-    var current_harm_index: Int = 1
-    def is_harmonic(freq: Double, harm_nbr: Int): Boolean = {
-      val ideal_freq = fundamental_freq * harm_nbr
-      val deviation_amt = ideal_freq * err_factor
-      (freq < ideal_freq + deviation_amt) &&
-      (freq > ideal_freq - deviation_amt)
+
+    // Determines the two possible harmonics from taking the floor and ceiling of freq/fundamental_freq,
+    // and if the frequency falls within the standard deviation of either, it is considered a harmonic.
+    def is_harmonic(freq: Double): Boolean = {
+      val fundamental_coeff = freq / fundamental_freq
+      val lower_ideal_harm = floor(fundamental_coeff) * fundamental_freq
+      val upper_ideal_harm = ceil(fundamental_coeff) * fundamental_freq
+      val lower_deviation_amt = lower_ideal_harm * err_factor
+      val upper_deviation_amt = upper_ideal_harm * err_factor
+
+      def falls_within_deviation(freq: Double, ideal: Double, dev_amt: Double): Boolean = {
+        (freq < ideal + dev_amt) && (freq > ideal - dev_amt)
+      }
+
+      falls_within_deviation(freq, lower_ideal_harm, lower_deviation_amt) ||
+      falls_within_deviation(freq, upper_ideal_harm, upper_deviation_amt)
     }
+
     peak_data.foreach { kv_pair =>
       val freq: Double = kv_pair(0)
       val intensity: Double = kv_pair(1)
       print("Analyzing " + freq + "...")
-      if (is_harmonic(freq, current_harm_index)) {
-        current_harm_index += 1
+      if (is_harmonic(freq)) {
         harmonic_intensities += intensity
         println("harmonic")
       } else {
