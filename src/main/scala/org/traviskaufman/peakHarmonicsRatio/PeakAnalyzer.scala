@@ -115,12 +115,16 @@ object PeakAnalyzer {
       print("Analyzing " + freq + "...")
       if (is_harmonic(freq)) {
         harmonic_intensities += intensity
-        println("harmonic")
+        println("harmonic (SIL = " + intensity + "w/m^2")
       } else {
         nonharmonic_intensities += intensity
-        println("nonharmonic")
+        println("nonharmonic (SIL = " + intensity + "w/m^2")
       }
     }
-    harmonic_intensities.sum / nonharmonic_intensities.sum
+    val harmonic_sum = harmonic_intensities.sum
+    println("Total SIL of all harmonic peaks: " + harmonic_sum + "w/m^2")
+    val nonharmonic_sum = nonharmonic_intensities.sum
+    println("Total SIL of all nonharmonic peaks: " + nonharmonic_sum + "w/m^2")
+    harmonic_sum / nonharmonic_sum
   }
 }
